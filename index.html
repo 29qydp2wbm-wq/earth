@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BlueDrop Foundation — 바다를 되살리는 청소년 재단</title>
+  <meta name="description" content="BlueDrop Foundation — 해양 플라스틱 수거 및 재활용 캠페인. 청소년이 만드는 깨끗한 바다.">
+  <style>
+    /* -------------------------------
+       기본 변수 / 리셋
+       ------------------------------- */
+    :root{
+      --bg:#f6fbff;
+      --card:#ffffff;
+      --accent:#1f8fd1;       /* 물색 */
+      --accent-2:#5ac8ff;     /* 밝은 물빛 */
+      --muted:#7b8b98;
+      --glass: rgba(255,255,255,0.7);
+      --radius:14px;
+      --max-width:1100px;
+      --gutter:24px;
+      --shadow: 0 8px 24px rgba(15,30,45,0.08);
+      --transition: 280ms cubic-bezier(.2,.9,.3,1);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Arial", sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: linear-gradient(180deg, #eaf7ff 0%, var(--bg) 60%);
+      color:#0f1720;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      scroll-behavior:smooth;
+      overflow-y:auto;
+    }
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%;height:auto;display:block}
+
+    /* -------------------------------
+       레이아웃: 헤더 / 네비 / 섹션
+       ------------------------------- */
+    header{
+      position:fixed;
+      top:16px;
+      left:50%;
+      transform:translateX(-50%);
+      width:calc(100% - 40px);
+      max-width:var(--max-width);
+      z-index:60;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.65));
+      border-radius:12px;
+      padding:10px 14px;
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    /* SVG 로고 */
+    .logo{
+      width:44px;height:44px;
+      display:inline-grid;
+      place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      border-radius:10px;
+      box-shadow: 0 6px 18px rgba(31,143,209,0.18);
+      color:#fff;
+      flex-shrink:0;
+    }
+    .brand h1{
+      font-size:16px;margin:0;
+      letter-spacing:-0.01em;
+    }
+    nav{display:flex;gap:14px;align-items:center}
+    nav a{
+      font-size:14px;color:var(--muted);padding:6px 10px;border-radius:8px;transition:var(--transition)
+    }
+    nav a:hover{color:var(--accent);background:rgba(31,143,209,0.06)}
+    .cta{
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      color:#fff;padding:8px 12px;border-radius:10px;font-weight:600;box-shadow:0 8px 20px rgba(90,200,255,0.14)
+    }
+
+    /* 모바일 메뉴 토글 (간단) */
+    .menu-toggle{display:none}
+
+    /* 페이지 섹션(풀스크린) */
+    main{
+      width:100%;
+      margin:0 auto;
+      padding-top:96px; /* header 여백 */
+      max-width:var(--max-width);
+    }
+    .sections{
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    section{
+      min-height:calc(100vh - 120px);
+      padding:48px var(--gutter);
+      display:flex;
+      align-items:center;
+      gap:40px;
+      border-radius:18px;
+      scroll-snap-align:start;
+      margin:28px 0;
+    }
+
+    /* 섹션 카드 스타일 공통 */
+    .panel{
+      background:var(--card);
+      width:100%;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:28px;
+    }
+
+    /* Hero (소개) */
+    .hero{
+      background: linear-gradient(180deg, rgba(90,200,255,0.12), rgba(255,255,255,0.5));
+      align-items:center;
+    }
+    .hero .left{max-width:650px}
+    .kicker{
+      font-size:13px;font-weight:700;color:var(--accent);
+      display:inline-block;margin-bottom:12px;background:rgba(31,143,209,0.06);padding:6px 10px;border-radius:999px;
+    }
+    .title{
+      font-size:36px;margin:6px 0 12px;
+    }
+    .lead{
+      font-size:16px;color:var(--muted);margin-bottom:18px;
+    }
+    .hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+    .hero .mock-img{
+      width:420px;height:320px;border-radius:14px;background:
+      linear-gradient(135deg, rgba(90,200,255,0.14), rgba(31,143,209,0.06));
+      display:flex;align-items:center;justify-content:center;color:var(--accent);
+      font-weight:700;font-size:14px;
+    }
+
+    /* 핵심활동 (두 칼럼) */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:28px;
+    }
+    .activity-list li{margin-bottom:12px;color:var(--muted)}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(31,143,209,0.06);color:var(--accent);font-weight:700;font-size:13px}
+
+    /* 캠페인 참여 (폼) */
+    form{display:grid;gap:12px}
+    input[type="text"], input[type="email"], textarea, select{
+      width:100%;padding:12px;border-radius:10px;border:1px solid #e6eef6;background:#fbfeff;font-size:14px;
+    }
+    textarea{min-height:120px;resize:vertical}
+    .row{display:flex;gap:12px}
+    .row .col{flex:1}
+    .btn{
+      display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent);color:#fff;font-weight:700;border:none;cursor:pointer;
+      transition:var(--transition);
+    }
+    .btn.secondary{background:transparent;color:var(--accent);border:1px solid rgba(31,143,209,0.12)}
+
+    /* 뉴스/스토리 (블로그 카드) */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    .post{
+      border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:0 8px 20px rgba(15,30,45,0.04);
+      display:flex;flex-direction:column;
+    }
+    .post .thumb{height:160px;background:linear-gradient(135deg,#bde8ff,#e6f8ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
+    .post .body{padding:14px}
+    .post h3{margin:0 0 8px;font-size:16px}
+    .meta{font-size:13px;color:var(--muted)}
+
+    /* 후원/문의 (두 칼럼 - CTA + 연락처) */
+    .support{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+    .donate{display:flex;flex-direction:column;gap:12px}
+
+    footer{
+      margin-top:18px;padding:22px 18px;border-radius:12px;text-align:center;color:var(--muted);font-size:13px;background:transparent;
+    }
+
+    /* 반응형 */
+    @media (max-width:980px){
+      .grid{grid-template-columns:1fr}
+      .support{grid-template-columns:1fr}
+      .hero{flex-direction:column}
+      .hero .mock-img{width:100%;height:220px}
+      nav{display:none}
+      .menu-toggle{display:inline-flex}
+    }
+    @media (max-width:520px){
+      .title{font-size:28px}
+      header{padding:8px 10px}
+    }
+
+    /* 시각적 보조: 스크롤 인디케이터 (오른쪽) */
+    .progress{
+      position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:70;background:rgba(255,255,255,0.7);
+      padding:8px;border-radius:10px;box-shadow:var(--shadow);font-size:12px;color:var(--muted)
+    }
+  </style>
+</head>
+<body>
+  <header role="banner" aria-label="메인 헤더">
+    <div class="brand" title="BlueDrop Foundation">
+      <div class="logo" aria-hidden="true">
+        <!-- 간단한 물방울+돌고래 아이콘 SVG -->
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2C12 2 8 6 8 9c0 3 2.686 5.5 6 5.5S20 12 20 9c0-3-4-7-4-7s-1.6 1.2-4 0z" fill="white" opacity="0.95"/>
+          <path d="M6 14c.5 1 2 2 5 2s6-1 7-2c-1.5 2-4.5 4-9 4s-9-2-9-4c1 0 1.5 0 1 0z" fill="white" opacity="0.9"/>
+        </svg>
+      </div>
+      <div>
+        <h1>BlueDrop Foundation</h1>
+        <div style="font-size:12px;color:var(--muted)">청소년이 만드는 깨끗한 바다</div>
+      </div>
+    </div>
+
+    <nav role="navigation" aria-label="주요 섹션">
+      <a href="#intro">소개</a>
+      <a href="#activity">핵심활동</a>
+      <a href="#campaign">캠페인참여</a>
+      <a href="#stories">뉴스 / 스토리</a>
+      <a href="#support" class="cta">후원 / 문의</a>
+    </nav>
+
+    <button class="menu-toggle" aria-expanded="false" aria-label="메뉴 열기" onclick="toggleMenu(event)">
+      ☰
+    </button>
+  </header>
+
+  <div class="progress" id="progress">0%</div>
+
+  <main>
+    <div class="sections">
+
+      <!-- 소개 (Hero) -->
+      <section id="intro" class="hero">
+        <div class="panel left">
+          <span class="kicker">BlueDrop Foundation</span>
+          <h2 class="title">한 방울의 행동이 바다를 살립니다</h2>
+          <p class="lead">우리는 해양 플라스틱을 수거하고 재활용하며, 청소년 주도의 캠페인으로 지역사회에 지속 가능한 변화를 만듭니다. 참여와 교육을 중심으로 '깨끗한 바다'를 목표로 활동합니다.</p>
+
+          <div class="actions" role="group" aria-label="행동 버튼들">
+            <a class="btn" href="#campaign">지금 참여하기</a>
+            <a class="btn secondary" href="#stories">최근 스토리 보기</a>
+          </div>
+
+          <hr style="margin:18px 0;border:none;border-top:1px solid rgba(15,30,45,0.04)">
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+            <div><span class="pill">캠페인</span></div>
+            <div style="color:var(--muted);font-size:13px">다음 정화 활동: 2025-11-15 · 부산 해운대구</div>
+          </div>
+        </div>
+
+        <aside class="hero-right">
+          <div class="mock-img" role="img" aria-label="해양 정화 활동 이미지">
+            바다 정화 활동 미리보기
+          </div>
+        </aside>
+      </section>
+
+      <!-- 핵심활동 -->
+      <section id="activity" aria-labelledby="activity-title">
+        <div class="panel grid">
+          <div>
+            <h3 id="activity-title">핵심 활동 — 해양 플라스틱 수거 및 재활용</h3>
+            <p style="color:var(--muted)">BlueDrop의 중심 활동은 해안과 근해에서 플라스틱을 수거하고, 수거한 자원을 효율적으로 재활용·업사이클하는 것입니다. 동시에 교육 프로그램을 통해 청소년과 지역사회를 연결합니다.</p>
+
+            <ul class="activity-list" style="margin-top:16px;">
+              <li>정기 해변 정화 활동 (청소년 주도)</li>
+              <li>수거 플라스틱 업사이클 워크숍</li>
+              <li>학교 연계 교육·워크숍 제공</li>
+              <li>플라스틱 감축 캠페인 · 시민 참여 설문</li>
+              <li>지역 기업과의 재활용 네트워크 구축</li>
+            </ul>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px;align-items:stretch;">
+            <div style="padding:14px;border-radius:12px;background:linear-gradient(180deg,#fff,#f6fdff);box-shadow:inset 0 1px 0 rgba(255,255,255,0.6)">
+              <strong>다음 행사</strong>
+              <div style="margin-top:6px;color:var(--muted)">2025-11-15 · 해운대 솔밭 해변</div>
+              <div style="margin-top:10px"><small style="color:var(--muted)">모집 인원: 50명 · 장비 기본 제공</small></div>
+            </div>
+
+            <div style="padding:14px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfdff);">
+              <strong>참여 혜택</strong>
+              <ul style="margin:8px 0 0 16px;color:var(--muted)">
+                <li>참여 확인서 발급</li>
+                <li>업사이클 굿즈 제공(선착순)</li>
+                <li>봉사 시간 인정 연계</li>
+              </ul>
+            </div>
+
+            <div style="padding:14px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfdff);">
+              <strong>파트너</strong>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+                <span class="pill">학교</span><span class="pill">지역기업</span><span class="pill">NGO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 캠페인참여 (폼) -->
+      <section id="campaign" aria-labelledby="campaign-title">
+        <div class="panel">
+          <h3 id="campaign-title">캠페인 참여 신청</h3>
+          <p style="color:var(--muted)">정기 정화 활동 및 워크숍에 참여하려면 아래 양식을 작성해 주세요. 모든 항목은 안전하고 책임감 있게 관리됩니다.</p>
+
+          <form id="signupForm" onsubmit="return handleSignup(event)" novalidate>
+            <div class="row">
+              <div class="col"><label for="name">이름</label><input id="name" name="name" type="text" placeholder="홍길동" required></div>
+              <div class="col"><label for="email">이메일</label><input id="email" name="email" type="email" placeholder="name@example.com" required></div>
+            </div>
+
+            <div>
+              <label for="school">소속 (학교/기관)</label>
+              <input id="school" name="school" type="text" placeholder="충렬여고 / 개인" required>
+            </div>
+
+            <div>
+              <label for="role">참여 유형</label>
+              <select id="role" name="role" required>
+                <option value="">선택하세요</option>
+                <option>정화 활동 참가자</option>
+                <option>자원봉사 코디네이터</option>
+                <option>워크숍 참가</option>
+                <option>후원/협력 제안</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="note">한 마디 (선택)</label>
+              <textarea id="note" name="note" placeholder="참여 이유나 문의사항을 적어주세요."></textarea>
+            </div>
+
+            <div style="display:flex;gap:12px;align-items:center;margin-top:6px;">
+              <button class="btn" type="submit">신청하기</button>
+              <button class="btn secondary" type="button" onclick="fillExample()">샘플 채우기</button>
+              <div id="formMsg" aria-live="polite" style="color:var(--muted);font-size:13px"></div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- 뉴스 / 스토리 -->
+      <section id="stories" aria-labelledby="stories-title">
+        <div class="panel">
+          <h3 id="stories-title">뉴스 · 스토리</h3>
+          <p style="color:var(--muted)">최근 활동과 참여자 이야기를 블로그 형식으로 전합니다.</p>
+
+          <div class="cards" style="margin-top:16px;">
+            <article class="post" aria-labelledby="post1">
+              <div class="thumb">정화활동 사진</div>
+              <div class="body">
+                <h3 id="post1">청소년이 주도한 부산 해변 정화기록</h3>
+                <div class="meta">2025-10-02 · 작성자: 이수민</div>
+                <p style="color:var(--muted);margin-top:8px">학생들이 모여 플라스틱 350kg을 수거했습니다. 재활용 업체와 협력해 업사이클링 프로젝트도 시작했습니다.</p>
+              </div>
+            </article>
+
+            <article class="post" aria-labelledby="post2">
+              <div class="thumb">업사이클 굿즈</div>
+              <div class="body">
+                <h3 id="post2">수거 플라스틱으로 만든 굿즈 런칭</h3>
+                <div class="meta">2025-09-12 · 작성자: 김정호</div>
+                <p style="color:var(--muted);margin-top:8px">플라스틱을 재활용해 만든 에코백과 펜을 제작, 판매 수익은 전액 캠페인에 환원합니다.</p>
+              </div>
+            </article>
+
+            <article class="post" aria-labelledby="post3">
+              <div class="thumb">교육 프로그램</div>
+              <div class="body">
+                <h3 id="post3">학교 연계 해양 교육 진행</h3>
+                <div class="meta">2025-08-30 · 작성자: 박서연</div>
+                <p style="color:var(--muted);margin-top:8px">해양 생태계의 중요성을 배우는 교실형 워크숍을 개최했습니다. 학생 참여율 95%.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 후원 / 문의 -->
+      <section id="support" aria-labelledby="support-title">
+        <div class="panel support">
+          <div class="donate">
+            <h3 id="support-title">후원 및 협력</h3>
+            <p style="color:var(--muted)">BlueDrop 활동은 개인·단체 후원과 지역 파트너의 지원으로 운영됩니다. 소액부터 정기후원까지 환영합니다.</p>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
+              <a class="btn" href="mailto:bluedrop@example.org?subject=후원문의">후원 문의 메일 보내기</a>
+              <a class="btn secondary" href="#campaign">봉사로 참여하기</a>
+            </div>
+
+            <hr style="margin:12px 0;border:none;border-top:1px solid rgba(15,30,45,0.04)">
+
+            <div style="color:var(--muted);font-size:13px">
+              <strong>연락처</strong><br>
+              이메일: bluedrop@example.org<br>
+              인스타그램: @bluedrop_official
+            </div>
+          </div>
+
+          <div style="padding:14px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:inset 0 1px 0 rgba(255,255,255,0.6)">
+            <h4>자주 묻는 질문</h4>
+            <details style="margin-top:8px">
+              <summary>참가 가능한 연령은?</summary>
+              <div style="color:var(--muted);margin-top:6px">중학생 이상 단체/개인 누구나 참여 가능합니다. 미성년자는 보호자 동의 필요.</div>
+            </details>
+
+            <details style="margin-top:8px">
+              <summary>현장 참가 시 준비물은?</summary>
+              <div style="color:var(--muted);margin-top:6px">편한 복장, 물, 개인 장갑(있으면), 선크림 권장.</div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+    </div> <!-- .sections -->
+
+    <footer role="contentinfo">
+      <div style="max-width:var(--max-width);margin:0 auto;padding:10px 18px;">
+        <div style="margin-bottom:8px;color:var(--muted)">© <strong>BlueDrop Foundation</strong> — 청소년이 만드는 깨끗한 바다</div>
+
+        <!-- 사용자가 요청한 명시 문구 -->
+        <div style="font-weight:600;color:#333;margin-top:6px">
+          이 홈페이지의 지적소유권은 <strong>충렬여고 1학년 6반</strong>에게 있다.
+        </div>
+
+        <div style="margin-top:10px;font-size:12px;color:var(--muted)">본 페이지는 교육 목적의 데모이며 실제 단체와 연관이 없습니다.</div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    /* -------------------------------
+       간단한 상호작용 JS: 폼, 메뉴, 진행도
+       ------------------------------- */
+
+    // 헤더의 모바일 메뉴 토글 (간단 구현: 토글 텍스트)
+    function toggleMenu(e){
+      const btn = e.currentTarget;
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', !expanded);
+      btn.textContent = expanded ? '☰' : '✕';
+      // 접근성: 토글 시 네비가 보이도록 (간단 트릭)
+      const nav = document.querySelector('nav');
+      if(nav) nav.style.display = expanded ? 'flex' : 'block';
+    }
+
+    // 폼 처리: 로컬 검증 후 가벼운 피드백 (서버 없음)
+    function handleSignup(e){
+      e.preventDefault();
+      const form = e.target;
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const school = form.school.value.trim();
+      const role = form.role.value;
+
+      const msgEl = document.getElementById('formMsg');
+
+      if(!name || !email || !school || !role){
+        msgEl.textContent = '필수 항목을 모두 작성해주세요.';
+        msgEl.style.color = '#d9534f';
+        return false;
+      }
+      // 간단 이메일 형식 체크
+      if(!/^\S+@\S+\.\S+$/.test(email)){
+        msgEl.textContent = '유효한 이메일 주소를 입력해주세요.';
+        msgEl.style.color = '#d9534f';
+        return false;
+      }
+
+      // 여기서는 실제 전송 대신 확인 메시지
+      msgEl.textContent = '신청이 접수되었습니다. 감사합니다! (데모)';
+      msgEl.style.color = 'green';
+      form.reset();
+      return false;
+    }
+
+    // 샘플 자동 채우기 (테스트용)
+    function fillExample(){
+      const form = document.getElementById('signupForm');
+      form.name.value = '학생 홍';
+      form.email.value = 'student@example.com';
+      form.school.value = '충렬여고';
+      form.role.value = '정화 활동 참가자';
+      document.getElementById('formMsg').textContent = '샘플이 입력되었습니다. 제출하려면 신청하기를 눌러주세요.';
+      document.getElementById('formMsg').style.color = 'var(--muted)';
+    }
+
+    // 페이지 스크롤 진행도 (오른쪽 표시)
+    (function(){
+      const prog = document.getElementById('progress');
+      function update(){
+        const scrolled = window.scrollY || window.pageYOffset;
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docH > 0 ? Math.round((scrolled / docH) * 100) : 0;
+        prog.textContent = pct + '%';
+      }
+      window.addEventListener('scroll', update, {passive:true});
+      update();
+    })();
+
+    // 키보드 접근성: 섹션으로 이동하는 링크에 포커스 표시(브라우저 기본이 충분)
+    // 추가: 폼, 버튼에 키보드 동작 자연스럽게 대응되도록 기본 유지
+  </script>
+</body>
+</html>
